@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LRC ⇄ SRT Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#0a1020;--panel:#121b30;--panel2:#0d1527;--line:#2b3a59;--text:#edf2ff;--muted:#a6b4d0;--accent:#a99bff;--mint:#73e6d0;--warn:#ffd38b;--bad:#ff929f}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 0 0,#242454 0,transparent 38%),var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1180px;width:calc(100% - 30px);margin:28px auto 55px}.head{display:flex;gap:14px;align-items:center;margin-bottom:23px}.logo{width:56px;height:56px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--mint));color:#11172a;font-weight:900;font-size:14px;text-align:center;line-height:1.1}.eyebrow{color:var(--mint);text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:800}h1{font-size:clamp(25px,4vw,35px);margin:2px 0;line-height:1.2}.sub{color:var(--muted);margin:0}.layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{min-width:0;padding:20px;background:linear-gradient(180deg,#151f36f7,#11192bf7);border:1px solid var(--line);border-radius:18px;box-shadow:0 16px 45px #0002}.panel h2{font-size:16px;margin:0 0 12px}.full{grid-column:1/-1}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.btn{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#22304b;color:var(--text);font:inherit;font-weight:700;cursor:pointer}.btn:hover{filter:brightness(1.13)}.btn.primary{background:linear-gradient(100deg,var(--accent),var(--mint));color:#10162a;border:0}.btn.small{font-size:12px;padding:6px 9px}.btn:disabled{opacity:.4;cursor:not-allowed}.select,.field input,.field select{width:100%;padding:10px 11px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;color:var(--text);font:inherit}.drop{border:1.5px dashed #586991;border-radius:12px;background:#0d1527;padding:16px;text-align:center;color:var(--muted);cursor:pointer;margin-bottom:12px}.drop.drag{border-color:var(--mint);background:#14283a}.drop b{color:var(--text)}input[type=file]{display:none}.filelist{display:grid;gap:6px;margin:8px 0}.file{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#0c1426}.file span{flex:1;overflow-wrap:anywhere;font-size:12px}.file button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:18px}textarea{width:100%;min-height:280px;resize:vertical;background:#080f1f;border:1px solid var(--line);border-radius:12px;padding:13px;color:#e3eaff;font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:2}textarea:focus,input:focus,select:focus{outline:2px solid #a99bff80;outline-offset:1px}.editorhead{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}.meta{font-size:11px;color:var(--muted)}.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.check{display:flex;align-items:flex-start;gap:8px;color:var(--muted);font-size:12px;margin:11px 0}.check input{accent-color:var(--accent);margin-top:3px}.status{font-size:12px;color:var(--mint);min-height:20px;margin-top:10px;overflow-wrap:anywhere}.status.error{color:var(--bad)}.stats{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.stat{border:1px solid var(--line);background:#0d1629;border-radius:8px;padding:5px 8px;font-size:11px;color:var(--muted)}.stat b{color:var(--text)}.results{display:grid;gap:7px;margin-top:10px}.result{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px}.result span{flex:1;overflow-wrap:anywhere;font-size:12px}.note{font-size:12px;color:var(--muted);padding:11px;background:#0d172a;border-radius:10px;margin-top:12px}.note strong{color:var(--text)}.footer{text-align:center;color:#8392b1;font-size:11px;margin-top:18px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.full{grid-column:auto}.fields{grid-template-columns:1fr 1fr}textarea{min-height:220px}.panel{padding:15px}}
+</style>
+</head>
+<body><main>
+<header class="head"><div class="logo">LRC<br>⇄ SRT</div><div><div class="eyebrow">Subtitle toolkit · Plus</div><h1>LRC ⇄ SRT Studio</h1><p class="sub">Chuyển đổi, chỉnh sửa và đồng bộ phụ đề ngay trên trình duyệt.</p></div></header>
+
+<div class="layout">
+<section class="panel">
+<h2>1. Nhập nội dung</h2>
+<div class="toolbar">
+<button class="btn" id="pickBtn">＋ Chọn file</button>
+<button class="btn" id="sampleBtn">Nạp ví dụ</button>
+<button class="btn" id="clearBtn">Xóa nội dung</button>
+<input id="files" type="file" accept=".lrc,.srt,.txt" multiple>
+</div>
+<div id="drop" class="drop" tabindex="0">Kéo thả file <b>.lrc / .srt / .txt</b> vào đây</div>
+<div id="filelist" class="filelist"></div>
+<div class="editorhead"><b>Ô nhập / dán văn bản</b><span id="inputCount" class="meta">0 ký tự</span></div>
+<textarea id="source" spellcheck="false" placeholder="Dán nội dung LRC hoặc SRT vào đây…&#10;&#10;Ví dụ LRC:&#10;[00:01.20]Xin chào&#10;[00:04.50]Hôm nay trời đẹp&#10;&#10;Bạn cũng có thể dán nội dung SRT để chỉnh sửa và xuất lại."></textarea>
+<div class="toolbar" style="margin-top:10px"><button class="btn primary" id="convertBtn">Chuyển đổi / phân tích</button><button class="btn" id="detectBtn">Tự nhận dạng định dạng</button></div>
+<div id="inputStatus" class="status">Bạn có thể dán nội dung hoặc chọn file.</div>
+</section>
+
+<section class="panel">
+<h2>2. Tùy chỉnh chuyển đổi</h2>
+<div class="fields">
+<div class="field"><label for="format">Định dạng đầu vào</label><select id="format"><option value="auto">Tự nhận dạng</option><option value="lrc">LRC</option><option value="srt">SRT</option></select></div>
+<div class="field"><label for="offset">Dịch thời gian (ms)</label><input id="offset" type="number" value="0" step="50"></div>
+<div class="field"><label for="duration">Dòng cuối (ms)</label><input id="duration" type="number" min="1" value="2500" step="100"></div>
+</div>
+<label class="check"><input type="checkbox" id="keepEmpty"><span>Giữ dòng LRC không có lời.</span></label>
+<label class="check"><input type="checkbox" id="mergeSame" checked><span>Gộp các lời có cùng thời điểm thành một phụ đề (nếu có).</span></label>
+<label class="check"><input type="checkbox" id="renumber" checked><span>Đánh lại số thứ tự phụ đề SRT liên tục.</span></label>
+<div class="note"><strong>Mẹo đồng bộ:</strong> nếu lời hiện chậm hơn nhạc 0,8 giây, nhập <code>-800</code>. Nếu lời hiện sớm hơn nhạc 0,8 giây, nhập <code>800</code>.</div>
+<div class="note"><strong>Tiện ích thêm:</strong> với SRT, bạn có thể dán nội dung vào ô bên trái, phân tích, chỉnh văn bản ở ô kết quả rồi xuất file. Thời gian SRT được giữ nguyên nếu không chỉnh offset.</div>
+<h2 style="margin-top:20px">3. Kết quả SRT (có thể chỉnh sửa)</h2>
+<div class="editorhead"><b>Nội dung xuất</b><span id="outputCount" class="meta">0 ký tự</span></div>
+<textarea id="output" spellcheck="false" placeholder="Kết quả sẽ xuất hiện tại đây. Bạn có thể sửa trực tiếp trước khi tải xuống."></textarea>
+<div class="toolbar" style="margin-top:10px">
+<button class="btn primary" id="downloadBtn" disabled>↓ Tải file SRT</button>
+<button class="btn" id="copyBtn" disabled>Copy nội dung</button>
+<button class="btn" id="saveTxtBtn" disabled>Lưu TXT</button>
+</div>
+<div class="stats" id="stats"></div><div id="outputStatus" class="status"></div>
+</section>
+<section class="panel full">
+<h2>4. Chuyển đổi hàng loạt</h2>
+<p class="sub">Khi bạn chọn nhiều file ở phần trên, mỗi file sẽ được xử lý riêng. Sau khi chuyển đổi, tải từng file hoặc tải tất cả thành một gói ZIP (nếu trình duyệt hỗ trợ tạo ZIP tại chỗ).</p>
+<div id="batchResults" class="results"><span class="meta">Chưa có kết quả hàng loạt.</span></div>
+<div class="toolbar" style="margin-top:12px"><button class="btn primary" id="downloadAllBtn" disabled>Tải tất cả file SRT</button></div>
+<div class="note">Riêng tư: mọi thao tác chạy trên thiết bị của bạn, không tải nội dung lên máy chủ. Nếu cần gói ZIP, bạn có thể tải từng SRT; trang này không dùng thư viện ZIP bên ngoài.</div>
+</section>
+</div>
+<div class="footer">LRC ⇄ SRT Studio · Dùng được trên Chrome, Edge, Firefox và Safari hiện đại</div>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);let chosen=[],batch=[];
+const source=$('source'),output=$('output'),filesInput=$('files');
+function setStatus(id,msg,error=false){$(id).textContent=msg;$(id).classList.toggle('error',error)}
+function count(){ $('inputCount').textContent=source.value.length.toLocaleString()+' ký tự';$('outputCount').textContent=output.value.length.toLocaleString()+' ký tự';$('downloadBtn').disabled=!output.value.trim();$('copyBtn').disabled=!output.value.trim();$('saveTxtBtn').disabled=!output.value.trim();}
+function msTime(ms){ms=Math.max(0,Math.floor(ms));let h=Math.floor(ms/3600000);ms%=3600000;let m=Math.floor(ms/60000);ms%=60000;let s=Math.floor(ms/1000),x=ms%1000;return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')},${String(x).padStart(3,'0')}`}
+function parseTime(s){let m=s.trim().match(/^(?:(\d+):)?(\d{1,2}):(\d{2})[,.](\d{1,3})$/);if(!m)return null;let h=+(m[1]||0),min=+m[2],sec=+m[3],f=m[4];if(min>59||sec>59)return null;let milli=f.length===1?+f*100:f.length===2?+f*10:+f;return ((h*60+min)*60+sec)*1000+milli}
+function detect(text){if(/\[\d{1,3}:\d{2}(?:[.:]\d{1,3})?\]/.test(text))return'lrc';if(/^\s*\d+\s*\r?\n\s*\d{1,2}:\d{2}:\d{2}[,.]\d{1,3}\s*--> /m.test(text)||/\d{1,2}:\d{2}:\d{2}[,.]\d{1,3}\s*-->/.test(text))return'srt';return'unknown'}
+function parseLrc(text,offset,duration,keepEmpty,mergeSame){
+ let rows=text.replace(/^\uFEFF/,'').split(/\r?\n/),fileOffset=0,entries=[];
+ for(let line of rows){let m=line.match(/^\s*\[offset:\s*([+-]?\d+)\s*\]/i);if(m)fileOffset=+m[1]}
+ for(let line of rows){line=line.trim();if(!line)continue;let stamps=[...line.matchAll(/\[(\d{1,3}):(\d{2})(?:[.:](\d{1,3}))?\]/g)];if(!stamps.length)continue;if(/^\[(?:ar|al|ti|by|re|ve|length|offset|kana|la|au|tool|id):.*\]$/i.test(line))continue;let lyric=line.replace(/\[\d{1,3}:\d{2}(?:[.:]\d{1,3})?\]/g,'').trim();if(!lyric&&!keepEmpty)continue;
+ for(let m of stamps){let f=m[3]||'',frac=f.length===1?+f*100:f.length===2?+f*10:+(f.slice(0,3)||0);entries.push({start:Math.max(0,(+m[1]*60+ +m[2])*1000+frac+fileOffset+offset),text:lyric})}}
+ entries.sort((a,b)=>a.start-b.start);
+ if(mergeSame){let merged=[];for(let e of entries){let last=merged[merged.length-1];if(last&&last.start===e.start&&e.text&&last.text!==e.text)last.text+=(last.text?'\n':'')+e.text;else merged.push({...e})}entries=merged}
+ if(!entries.length)throw Error('Không tìm thấy mốc thời gian LRC hợp lệ.');
+ return entries.map((e,i)=>{let end=i+1<entries.length?entries[i+1].start:e.start+duration;if(end<=e.start)end=e.start+1;return `${i+1}\n${msTime(e.start)} --> ${msTime(end)}\n${e.text}`}).join('\n\n')+'\n';
+}
+function parseSrt(text,offset,renumber){
+ let normalized=text.replace(/^\uFEFF/,'').replace(/\r/g,'').trim();if(!normalized)throw Error('Ô nhập đang trống.');
+ let blocks=normalized.split(/\n\s*\n+/),out=[],bad=0;
+ for(let block of blocks){let lines=block.split('\n'),idx=lines.findIndex(l=>l.includes('-->'));if(idx<0){bad++;continue}
+ let mt=lines[idx].match(/^\s*(\d{1,2}:\d{2}:\d{2}[,.]\d{1,3})\s*-->\s*(\d{1,2}:\d{2}:\d{2}[,.]\d{1,3})(.*)$/);if(!mt){bad++;continue}
+ let start=parseTime(mt[1]),end=parseTime(mt[2]);if(start===null||end===null){bad++;continue}start=Math.max(0,start+offset);end=Math.max(start+1,end+offset);
+ let textLines=lines.slice(idx+1);let num=renumber?out.length+1:(idx>0?lines[idx-1].trim():String(out.length+1));
+ out.push(`${num}\n${msTime(start)} --> ${msTime(end)}${mt[3]||''}\n${textLines.join('\n')}`)}
+ if(!out.length)throw Error('Không nhận dạng được cấu trúc SRT hợp lệ.');
+ return {text:out.join('\n\n')+'\n',bad};
+}
+function download(name,text){let blob=new Blob(['\uFEFF',text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1200)}
+function renderChosen(){let box=$('filelist');box.replaceChildren();chosen.forEach((f,i)=>{let d=document.createElement('div');d.className='file';let s=document.createElement('span');s.textContent=f.name+' · '+Math.round(f.size/1024)+' KB';let b=document.createElement('button');b.textContent='×';b.title='Bỏ file';b.onclick=()=>{chosen.splice(i,1);renderChosen()};d.append(s,b);box.append(d)})}
+function addFiles(list){for(let f of list)if(/\.(lrc|srt|txt)$/i.test(f.name)&&!chosen.some(x=>x.name===f.name&&x.size===f.size&&x.lastModified===f.lastModified))chosen.push(f);renderChosen();if(chosen.length)setStatus('inputStatus',`Đã chọn ${chosen.length} file. File đầu tiên được nạp vào ô nhập để chỉnh sửa.`)}
+async function readFile(f){try{return await f.text()}catch{return new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsText(f)})}}
+function convertText(text,forceFormat){let fmt=forceFormat==='auto'?detect(text):forceFormat;if(fmt==='unknown')throw Error('Không nhận dạng được LRC hoặc SRT. Hãy chọn định dạng đầu vào thủ công.');let off=+$('offset').value||0,dur=+$('duration').value||2500;if(dur<=0)throw Error('Thời lượng dòng cuối phải lớn hơn 0.');if(fmt==='lrc')return {text:parseLrc(text,off,dur,$('keepEmpty').checked,$('mergeSame').checked),fmt};return {...parseSrt(text,off,$('renumber').checked),fmt}}
+function showStats(text){let blocks=text.trim()?text.trim().split(/\n\s*\n+/).length:0;let times=[...text.matchAll(/(\d{2}:\d{2}:\d{2},\d{3})\s*-->/g)];$('stats').replaceChildren();[['Số phụ đề',blocks],['Ký tự',text.length],['Thời gian',times.length?'Đã phân tích':'—']].forEach(([k,v])=>{let e=document.createElement('span');e.className='stat';e.innerHTML=`${k}: <b></b>`;e.querySelector('b').textContent=v;$('stats').append(e)})}
+$('pickBtn').onclick=()=>filesInput.click();
+filesInput.onchange=async e=>{addFiles(e.target.files);if(chosen.length){source.value=await readFile(chosen[chosen.length-1]);$('format').value='auto';count()}filesInput.value=''};
+$('drop').onclick=()=>filesInput.click();$('drop').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();filesInput.click()}};
+for(let ev of ['dragenter','dragover'])$('drop').addEventListener(ev,e=>{e.preventDefault();$('drop').classList.add('drag')});
+for(let ev of ['dragleave','drop'])$('drop').addEventListener(ev,e=>{e.preventDefault();$('drop').classList.remove('drag')});
+$('drop').addEventListener('drop',async e=>{addFiles(e.dataTransfer.files);if(e.dataTransfer.files.length){source.value=await readFile(e.dataTransfer.files[0]);count()}});
+$('sampleBtn').onclick=()=>{source.value='[ar:Demo]\n[offset:0]\n[00:01.20]Xin chào thế giới\n[00:04.50]Hôm nay trời thật đẹp\n[00:07.00]Cùng nhau bước tiếp';$('format').value='lrc';count();setStatus('inputStatus','Đã nạp ví dụ LRC.')};
+$('clearBtn').onclick=()=>{source.value='';output.value='';chosen=[];batch=[];renderChosen();$('batchResults').replaceChildren();$('stats').replaceChildren();setStatus('inputStatus','Đã xóa nội dung.');setStatus('outputStatus','');count();$('downloadAllBtn').disabled=true};
+source.addEventListener('input',count);output.addEventListener('input',()=>{count();showStats(output.value)});$('detectBtn').onclick=()=>{let f=detect(source.value);$('format').value=f==='unknown'?'auto':f;setStatus('inputStatus',f==='unknown'?'Chưa nhận dạng được định dạng.':'Đã nhận dạng: '+f.toUpperCase())};
+$('convertBtn').onclick=()=>{try{let result=convertText(source.value,$('format').value);output.value=result.text;count();showStats(output.value);setStatus('inputStatus',`Đã xử lý nội dung ${result.fmt.toUpperCase()}.`);setStatus('outputStatus',result.bad?`Đã chuyển đổi; bỏ qua ${result.bad} khối không hợp lệ.`:'Sẵn sàng tải xuống hoặc chỉnh sửa nội dung.');}catch(e){setStatus('inputStatus',e.message,true)}};
+$('downloadBtn').onclick=()=>download('subtitles.srt',output.value);$('saveTxtBtn').onclick=()=>download('subtitles.txt',output.value);
+$('copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(output.value);setStatus('outputStatus','Đã sao chép nội dung.')}catch{output.select();document.execCommand('copy');setStatus('outputStatus','Đã sao chép nội dung.')}};
+$('downloadAllBtn').onclick=()=>batch.forEach(b=>download(b.name,b.text));
+async function processBatch(){batch=[];let errs=[];for(let f of chosen){try{let txt=await readFile(f),res=convertText(txt,'auto');batch.push({name:f.name.replace(/\.(lrc|srt|txt)$/i,'')+'.srt',text:res.text})}catch(e){errs.push(f.name+': '+e.message)}}
+let box=$('batchResults');box.replaceChildren();if(!batch.length){let s=document.createElement('span');s.className='meta';s.textContent=errs.join(' · ')||'Không có kết quả.';box.append(s)}else batch.forEach(b=>{let r=document.createElement('div');r.className='result';let s=document.createElement('span');s.textContent=b.name;let btn=document.createElement('button');btn.className='btn small';btn.textContent='Tải SRT';btn.onclick=()=>download(b.name,b.text);r.append(s,btn);box.append(r)});$('downloadAllBtn').disabled=!batch.length;if(errs.length)setStatus('outputStatus','Một số file lỗi: '+errs.join(' | '),true);else if(batch.length)setStatus('outputStatus',`Đã xử lý hàng loạt ${batch.length} file.`)}
+// Batch processing runs when user clicks conversion with selected files.
+const originalConvert=$('convertBtn').onclick;
+$('convertBtn').onclick=()=>{originalConvert();if(chosen.length>1)processBatch();else if(chosen.length===1){processBatch()}};
+count();
+})();
+</script>
+</body></html>
